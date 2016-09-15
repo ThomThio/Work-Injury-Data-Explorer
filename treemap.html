@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html>
+<meta charset="utf-8">
+<title>Work Injury Data Explorer</title>
+<head>
+<script src="js/jquery.js"></script>
+<link rel="stylesheet" type="text/css" href="css/bootstrap.css" />
+<script src="js/bootstrap.min.js"></script>
+<script src="js/d3.min.js"></script>
+<link rel="stylesheet" href="css/bootstrap-select.min.css" lazyload>
+<script src="js/bootstrap-select.min.js"></script>
+
+
+
+
+</head>
+<body>
+
+<div id="header" class="navbar">
+      <div class="navbar-header">
+        <h1>Work Injury Data Explorer</h1>
+     </div>
+</div>
+<a onclick="ans(1)">Which industries did accidents happen the most? Which jobs? Were their work mostly manual labour? What was the cause?</a><br>
+<a onclick="ans(2)">Which injuries happened the most at which times? What industry?</a><br>
+<a onclick="ans(3)">What type of accident happened, what objects where involved?</a><br>
+<a onclick="ans(4)">What proportion of work experience did person have that got injured?</a><br>
+<a onclick="ans(5)">How long did informant/company wait to report the injury? Which companies were these?</a><br>
+<a onclick="ans(6)">For each type of accident, which day of the week did they frequently occur on? Which times of the day did accidents occur the most?</a><br>
+<a onclick="ans(7)">How bad were the injuries?</a><br>
+<a onclick="ans(8)">Did major injuries happen during shift periods, late at night, during OT? What types of injuries?</a><br>
+
+<div id="hierarchy-selection">
+  Or set your own view:<br>
+      <select class="selectpicker" data-size="5" id="view-hierarchy-selector-1" data-live-search="true">
+        <option id="setLevel" value="Set Level 1 View">Set Level 1 View</option>
+        <option id="Occupation" value="Occupation">Occupation of Victim</option>
+        <option id="Victim's Age (Reported Yr - Birth Yr)" value="Victim's Age (Reported Yr - Birth Yr)">Age of Victim</option>
+        <option id="Victim's Gender" value="Victim's Gender">Gender of Victim</option>
+        <option id="" value="Pct Manual Work">Proportion of Manual Work of Victim</option>
+        <option id="" value="Months worked">Months with Company</option>
+        <option id="Hospitalised for at least 24 hours" value="Hospitalised for at least 24 hours">Hospitalised for at least 24 hours?</option>
+        <option id="Injured When Working Overtime" value="Injured When Working Overtime">Injured When Working Overtime?</option>
+        <option id="Injured While Performing Official Work Duties" value="Injured While Performing Official Work Duties">Injured While Performing Official Work Duties?</option>
+        <option id="" value="Supposed Start Work Timing on Day Injured">Time of Work on Injury Day</option>
+        
+
+        <option id="Major Industry (SSIC 2010)" value="Major Industry (SSIC 2010)">Industry (Broad)</option>
+        <option id="Sub Industry  (SSIC 2010)" value="Sub Industry  (SSIC 2010)">Industry (Specific)</option>
+        
+        <option id="Cause" value="Cause">Cause of Accident</option>
+       
+        <option id="Accident Agency Level 2 Desc" value="Accident Agency Level 2 Desc">Accident Description</option>
+        
+        <option id="Major Injury Indicator" value="Major Injury Indicator">Was Injury Major?</option>
+        <option id="Body Parts Injured" value="Body Parts Injured">Body Parts Injured</option>
+        <option id="Nature of Injury" value="Nature of Injury">Nature of Injury</option>
+
+
+        <option id="Informant Type" value="Informant Type">Informant Type</option>
+        <option id="" value="Informant's No Of Employees">Size of Informant/Company</option>
+        
+        
+        <option id="" value="Hospital / Clinic Treated or Examined">Location of Treatment</option>
+
+        
+        <option id="Accident Time" value="Accident Time">Time of Accident</option>
+        <option id="Accident Weekday" value="Accident Weekday">Weekday of Accident</option>
+        <option id="Accident Month mmm" value="Accident Month mmm">Month of Accident</option>
+
+        <option id="Accident Date" value="Accident Date">Date of Accident</option>
+        <option id="Reported Date" value="Reported Date">Date of Accident Report</option>
+
+        <option id="Occupier's Name" value="Occupier's Name">Victim's Name</option>
+        <option id="Informant's Company Name" value="Informant's Company Name">Company Name</option>
+        <option id="No. of MC Days" value="No. of MC Days">No. of MC Days</option>
+      </select>
+
+
+      <select class="selectpicker" data-size="5" id="view-hierarchy-selector-2" data-live-search="true">
+        <option id="setLevel" value="Set Level 2 View">Set Level 2 View</option>
+       <option id="Occupation" value="Occupation">Occupation of Victim</option>
+        <option id="Victim's Age (Reported Yr - Birth Yr)" value="Victim's Age (Reported Yr - Birth Yr)">Age of Victim</option>
+        <option id="Victim's Gender" value="Victim's Gender">Gender of Victim</option>
+        <option id="" value="Pct Manual Work">Proportion of Manual Work of Victim</option>
+        <option id="" value="Months worked">Months with Company</option>
+        <option id="Hospitalised for at least 24 hours" value="Hospitalised for at least 24 hours">Hospitalised for at least 24 hours?</option>
+        <option id="Injured When Working Overtime" value="Injured When Working Overtime">Injured When Working Overtime?</option>
+        <option id="Injured While Performing Official Work Duties" value="Injured While Performing Official Work Duties">Injured While Performing Official Work Duties?</option>
+        <option id="" value="Supposed Start Work Timing on Day Injured">Time of Work on Injury Day</option>
+        
+
+        <option id="Major Industry (SSIC 2010)" value="Major Industry (SSIC 2010)">Industry (Broad)</option>
+        <option id="Sub Industry  (SSIC 2010)" value="Sub Industry  (SSIC 2010)">Industry (Specific)</option>
+        
+        <option id="Cause" value="Cause">Cause of Accident</option>
+        <option id="Accident Agency Level 2 Desc" value="Accident Agency Level 2 Desc">Accident Description</option>
+        
+        <option id="Major Injury Indicator" value="Major Injury Indicator">Was Injury Major?</option>
+        <option id="Body Parts Injured" value="Body Parts Injured">Body Parts Injured</option>
+        <option id="Nature of Injury" value="Nature of Injury">Nature of Injury</option>
+
+
+        <option id="Informant Type" value="Informant Type">Informant Type</option>
+        <option id="" value="Informant's No Of Employees">Size of Informant/Company</option>
+        
+        
+        <option id="" value="Hospital / Clinic Treated or Examined">Location of Treatment</option>
+
+        
+        <option id="Accident Time" value="Accident Time">Time of Accident</option>
+        <option id="Accident Weekday" value="Accident Weekday">Weekday of Accident</option>
+        <option id="Accident Month mmm" value="Accident Month mmm">Month of Accident</option>
+
+        <option id="Accident Date" value="Accident Date">Date of Accident</option>
+        <option id="Reported Date" value="Reported Date">Date of Accident Report</option>
+
+        <option id="Occupier's Name" value="Occupier's Name">Victim's Name</option>
+        <option id="Informant's Company Name" value="Informant's Company Name">Company Name</option>
+        <option id="No. of MC Days" value="No. of MC Days">No. of MC Days</option>
+
+      </select>
+      <select class="selectpicker" data-size="5" id="view-hierarchy-selector-3" data-live-search="true">
+         <option id="setLevel" value="Set Level 3 View">Set Level 3 View</option>
+        <option id="Occupation" value="Occupation">Occupation</option>
+        <option id="Major Industry (SSIC 2010)" value="Major Industry (SSIC 2010)">Industry (Broad)</option>
+        <option id="Sub Industry  (SSIC 2010)" value="Sub Industry  (SSIC 2010)">Industry (Specific)</option>
+        <option id="Cause" value="Cause">Cause of Accident</option>
+        <option id="Victim's Age (Reported Yr - Birth Yr)" value="Victim's Age (Reported Yr - Birth Yr)">Age of Victim</option>
+
+        <option id="Victim's Gender" value="Victim's Gender">Gender of Victim</option>
+
+        <option id="Body Parts Injured" value="Body Parts Injured">Body Parts Injured</option>
+        <option id="Nature of Injury" value="Nature of Injury">Nature of Injury</option>
+        <option id="Informant Type" value="Informant Type">Informant Type</option>
+        
+        <option id="Accident Agency Level 2 Desc" value="Accident Agency Level 2 Desc">Accident Agency Level 2 Desc</option>
+        
+        <option id="" value="Informant's No Of Employees">Size of Company</option>
+        <option id="" value="Months worked">Months with Company</option>
+        <option id="" value="Pct Manual Work">Proportion of Manual Work</option>
+        <option id="" value="Hospital / Clinic Treated or Examined">Location of Treatment</option>
+        <option id="" value="Supposed Start Work Timing on Day Injured">Time of Work on Injury Day</option>
+
+        <option id="Major Injury Indicator" value="Major Injury Indicator">Major Injury?</option>
+        <option id="Hospitalised for at least 24 hours" value="Hospitalised for at least 24 hours">Hospitalised for at least 24 hours?</option>
+         
+        <option id="Injured When Working Overtime" value="Injured When Working Overtime">Injured When Working Overtime?</option>
+        <option id="Injured While Performing Official Work Duties" value="Injured While Performing Official Work Duties">Injured While Performing Official Work Duties?</option>
+        
+        <option id="Accident Weekday" value="Accident Weekday">Weekday of Accident</option>
+        <option id="Accident Month mmm" value="Accident Month mmm">Month of Accident</option>
+        <option id="Accident Time" value="Accident Time">Time of Accident</option>
+
+        <option id="Accident Date" value="Accident Date">Date of Accident</option>
+        <option id="Reported Date" value="Reported Date">Date of Accident Report</option>
+
+        <option id="Occupier's Name" value="Occupier's Name">Victim's Name</option>
+        <option id="Informant's Company Name" value="Informant's Company Name">Company Name</option>
+        <option id="No. of MC Days" value="No. of MC Days">No. of MC Days</option>
+
+
+
+      </select>
+      <select class="selectpicker" data-size="5" id="view-hierarchy-selector-4" data-live-search="true">
+         <option id="setLevel" value="Set Level 4 View">Set Level 4 View</option>
+       <option id="Occupation" value="Occupation">Occupation of Victim</option>
+        <option id="Victim's Age (Reported Yr - Birth Yr)" value="Victim's Age (Reported Yr - Birth Yr)">Age of Victim</option>
+        <option id="Victim's Gender" value="Victim's Gender">Gender of Victim</option>
+        <option id="" value="Pct Manual Work">Proportion of Manual Work of Victim</option>
+        <option id="" value="Months worked">Months with Company</option>
+        <option id="Hospitalised for at least 24 hours" value="Hospitalised for at least 24 hours">Hospitalised for at least 24 hours?</option>
+        <option id="Injured When Working Overtime" value="Injured When Working Overtime">Injured When Working Overtime?</option>
+        <option id="Injured While Performing Official Work Duties" value="Injured While Performing Official Work Duties">Injured While Performing Official Work Duties?</option>
+        <option id="" value="Supposed Start Work Timing on Day Injured">Time of Work on Injury Day</option>
+        
+
+        <option id="Major Industry (SSIC 2010)" value="Major Industry (SSIC 2010)">Industry (Broad)</option>
+        <option id="Sub Industry  (SSIC 2010)" value="Sub Industry  (SSIC 2010)">Industry (Specific)</option>
+        
+        <option id="Cause" value="Cause">Cause of Accident</option>
+        <option id="Accident Agency Level 2 Desc" value="Accident Agency Level 2 Desc">Accident Description</option>
+        
+        <option id="Major Injury Indicator" value="Major Injury Indicator">Was Injury Major?</option>
+        <option id="Body Parts Injured" value="Body Parts Injured">Body Parts Injured</option>
+        <option id="Nature of Injury" value="Nature of Injury">Nature of Injury</option>
+
+
+        <option id="Informant Type" value="Informant Type">Informant Type</option>
+        <option id="" value="Informant's No Of Employees">Size of Informant/Company</option>
+        
+        
+        <option id="" value="Hospital / Clinic Treated or Examined">Location of Treatment</option>
+
+        
+        <option id="Accident Time" value="Accident Time">Time of Accident</option>
+        <option id="Accident Weekday" value="Accident Weekday">Weekday of Accident</option>
+        <option id="Accident Month mmm" value="Accident Month mmm">Month of Accident</option>
+
+        <option id="Accident Date" value="Accident Date">Date of Accident</option>
+        <option id="Reported Date" value="Reported Date">Date of Accident Report</option>
+
+        <option id="Occupier's Name" value="Occupier's Name">Victim's Name</option>
+        <option id="Informant's Company Name" value="Informant's Company Name">Company Name</option>
+        <option id="No. of MC Days" value="No. of MC Days">No. of MC Days</option>
+
+
+
+      </select>
+      <select class="selectpicker" data-size="5" id="view-hierarchy-selector-5" data-live-search="true">
+         <option id="setLevel" value="Set Level 5 View">Set Level 5 View</option>
+        <option id="Occupation" value="Occupation">Occupation of Victim</option>
+        <option id="Victim's Age (Reported Yr - Birth Yr)" value="Victim's Age (Reported Yr - Birth Yr)">Age of Victim</option>
+        <option id="Victim's Gender" value="Victim's Gender">Gender of Victim</option>
+        <option id="" value="Pct Manual Work">Proportion of Manual Work of Victim</option>
+        <option id="" value="Months worked">Months with Company</option>
+        <option id="Hospitalised for at least 24 hours" value="Hospitalised for at least 24 hours">Hospitalised for at least 24 hours?</option>
+        <option id="Injured When Working Overtime" value="Injured When Working Overtime">Injured When Working Overtime?</option>
+        <option id="Injured While Performing Official Work Duties" value="Injured While Performing Official Work Duties">Injured While Performing Official Work Duties?</option>
+        <option id="" value="Supposed Start Work Timing on Day Injured">Time of Work on Injury Day</option>
+        
+
+        <option id="Major Industry (SSIC 2010)" value="Major Industry (SSIC 2010)">Industry (Broad)</option>
+        <option id="Sub Industry  (SSIC 2010)" value="Sub Industry  (SSIC 2010)">Industry (Specific)</option>
+        
+        <option id="Cause" value="Cause">Cause of Accident</option>
+        <option id="Accident Agency Level 2 Desc" value="Accident Agency Level 2 Desc">Accident Description</option>
+        
+        <option id="Major Injury Indicator" value="Major Injury Indicator">Was Injury Major?</option>
+        <option id="Body Parts Injured" value="Body Parts Injured">Body Parts Injured</option>
+        <option id="Nature of Injury" value="Nature of Injury">Nature of Injury</option>
+
+
+        <option id="Informant Type" value="Informant Type">Informant Type</option>
+        <option id="" value="Informant's No Of Employees">Size of Informant/Company</option>
+        
+        
+        <option id="" value="Hospital / Clinic Treated or Examined">Location of Treatment</option>
+
+        
+        <option id="Accident Time" value="Accident Time">Time of Accident</option>
+        <option id="Accident Weekday" value="Accident Weekday">Weekday of Accident</option>
+        <option id="Accident Month mmm" value="Accident Month mmm">Month of Accident</option>
+
+        <option id="Accident Date" value="Accident Date">Date of Accident</option>
+        <option id="Reported Date" value="Reported Date">Date of Accident Report</option>
+
+        <option id="Occupier's Name" value="Occupier's Name">Victim's Name</option>
+        <option id="Informant's Company Name" value="Informant's Company Name">Company Name</option>
+        <option id="No. of MC Days" value="No. of MC Days">No. of MC Days</option>
+
+
+      </select>
+<a onclick="resetAll()">Reset All</a>
+  </div>
+
+  <button type="button" onclick="applyCols()" class="btn btn-warning" id="hierarchy-select-button">Apply View Hierarchy</button>
+
+
+
+<div id="titleArea">
+    <h1 id="title"></h1>
+    <h2 id="levels"></h2>
+</div>
+<div id="chart"></div>
+<script>
+	var treemap_fileName = "data sets/WPI_data.csv";
+</script>
+
+<script src="js/treemap_2.js"></script>
+
+</body>
+</html>
